@@ -1,52 +1,16 @@
-[gd_scene load_steps=19 format=3 uid="uid://bqkvkdww6e17h"]
+[gd_scene format=3 uid="uid://bqkvkdww6e17h"]
 
 [ext_resource type="Script" uid="uid://csvporn6ch8hn" path="res://oven.gd" id="1_22qub"]
 [ext_resource type="PackedScene" uid="uid://26dsalwsb86r" path="res://models/roasted_chicken.glb" id="2_my181"]
-[ext_resource type="Script" path="res://scripts/oven_thermal_model.gd" id="3_thermal"]
-[ext_resource type="Script" path="res://scripts/chicken_thermal_model.gd" id="4_chicken"]
-[ext_resource type="Script" path="res://scripts/rotisserie_mechanism.gd" id="5_rotisser"]
-[ext_resource type="Script" path="res://scripts/oven_door.gd" id="6_door"]
-[ext_resource type="Script" path="res://scripts/heater_visual.gd" id="7_heater"]
-[ext_resource type="Script" path="res://scripts/plant_interface.gd" id="8_plant"]
-[ext_resource type="Script" path="res://scripts/orbit_camera.gd" id="9_orbit"]
-
-[sub_resource type="StandardMaterial3D" id="StainlessSteel"]
-albedo_color = Color(0.72, 0.72, 0.74, 1)
-metallic = 0.9
-roughness = 0.32
-
-[sub_resource type="StandardMaterial3D" id="GlassDoor"]
-transparency = 1
-albedo_color = Color(0.78, 0.82, 0.85, 0.25)
-metallic = 0.0
-roughness = 0.05
-shading_mode = 0
-
-[sub_resource type="StandardMaterial3D" id="DoorFrame"]
-albedo_color = Color(0.55, 0.55, 0.58, 1)
-metallic = 0.85
-roughness = 0.35
-
-[sub_resource type="StandardMaterial3D" id="HeaterGlow"]
-albedo_color = Color(0.2901961, 0.12156863, 0.05882353, 1)
-emission_enabled = true
-emission = Color(1, 0.1254902, 0, 1)
-emission_energy_multiplier = 0.0
-
-[sub_resource type="StandardMaterial3D" id="DripTray"]
-albedo_color = Color(0.35, 0.35, 0.36, 1)
-metallic = 0.7
-roughness = 0.45
-
-[sub_resource type="StandardMaterial3D" id="MotorBody"]
-albedo_color = Color(0.18, 0.18, 0.20, 1)
-metallic = 0.5
-roughness = 0.5
-
-[sub_resource type="StandardMaterial3D" id="DisplayPanel"]
-albedo_color = Color(0.05, 0.05, 0.06, 1)
-metallic = 0.3
-roughness = 0.6
+[ext_resource type="Script" uid="uid://wcacjrldkxu2" path="res://scripts/oven_thermal_model.gd" id="3_thermal"]
+[ext_resource type="Script" uid="uid://dduwdv4pb4c5c" path="res://scripts/chicken_thermal_model.gd" id="4_chicken"]
+[ext_resource type="Script" uid="uid://dldqqu1g25nk0" path="res://scripts/dual_rotisserie_mechanism.gd" id="5_rotisser"]
+[ext_resource type="Script" uid="uid://c3ml2knoc6fe6" path="res://scripts/oven_door.gd" id="6_door"]
+[ext_resource type="Script" uid="uid://gvnuy2p70ntl" path="res://scripts/heater_visual.gd" id="7_heater"]
+[ext_resource type="Script" uid="uid://7bemxmek7awe" path="res://scripts/plant_interface.gd" id="8_plant"]
+[ext_resource type="Script" uid="uid://kards0drqdm3" path="res://scripts/orbit_camera.gd" id="9_orbit"]
+[ext_resource type="Script" uid="uid://bc0h2236wf3m4" path="res://scripts/multi_zone_thermal_model.gd" id="10_mz"]
+[ext_resource type="Script" uid="uid://4ltustmajpxg" path="res://scripts/circulation_fan.gd" id="11_fan"]
 
 [sub_resource type="Environment" id="Env1"]
 background_mode = 1
@@ -61,40 +25,75 @@ glow_enabled = true
 font_size = 18
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
-font_color = Color(1, 1, 1, 1)
 
-[node name="Oven" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="StainlessSteel"]
+albedo_color = Color(0.72, 0.72, 0.74, 1)
+metallic = 0.9
+roughness = 0.32
+
+[sub_resource type="StandardMaterial3D" id="DoorFrame"]
+albedo_color = Color(0.55, 0.55, 0.58, 1)
+metallic = 0.85
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="HeaterGlow"]
+albedo_color = Color(0.2901961, 0.12156863, 0.05882353, 1)
+emission_enabled = true
+emission = Color(1, 0.1254902, 0, 1)
+emission_energy_multiplier = 0.0
+
+[sub_resource type="StandardMaterial3D" id="FanBlade"]
+albedo_color = Color(0.85, 0.85, 0.87, 1)
+metallic = 0.7
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="DripTray"]
+albedo_color = Color(0.35, 0.35, 0.36, 1)
+metallic = 0.7
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="GlassDoor"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.78, 0.82, 0.85, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="DisplayPanel"]
+albedo_color = Color(0.05, 0.05, 0.06, 1)
+metallic = 0.3
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="MotorBody"]
+albedo_color = Color(0.18, 0.18, 0.2, 1)
+metallic = 0.5
+roughness = 0.5
+
+[node name="Oven" type="Node3D" unique_id=383611288]
 script = ExtResource("1_22qub")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=13786289]
 environment = SubResource("Env1")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.95, 0.31, 0, -0.31, 0.95, 0, 0.6, 7.5)
+[node name="Camera3D" type="Camera3D" parent="." unique_id=168797935]
+transform = Transform3D(1, 0, 0, 0, 0.95, 0.31, 0, -0.31, 0.95, 0, 0.5, 2)
 current = true
 script = ExtResource("9_orbit")
-target = Vector3(0, 0.3, 0)
-distance = 8.0
-yaw = 0.0
-pitch = 0.18
+target = Vector3(0, 0.2, 0)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=743673997]
 transform = Transform3D(0.8660254, -0.25, 0.4330127, 0, 0.8660254, 0.5, -0.5, -0.4330127, 0.75, 2, 4, 4)
 light_energy = 1.2
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=207041299]
 
-[node name="TemperatureLabel" type="Label" parent="UI"]
-mouse_filter = 2
+[node name="TemperatureLabel" type="Label" parent="UI" unique_id=1519018238]
 offset_left = 16.0
 offset_top = 12.0
 offset_right = 700.0
 offset_bottom = 40.0
-text = "Oven: 25.0 °C   Chicken: 25.0 °C"
+text = "Oven: 25.0 �C   Chicken: 25.0 �C"
 label_settings = SubResource("LabelSettings_ui")
 
-[node name="StatusLabel" type="Label" parent="UI"]
-mouse_filter = 2
+[node name="StatusLabel" type="Label" parent="UI" unique_id=1070859263]
 offset_left = 16.0
 offset_top = 40.0
 offset_right = 700.0
@@ -102,198 +101,254 @@ offset_bottom = 68.0
 text = "Door: CLOSED   Heater: 0%   Rotisserie: STOP @ 0.00 RPM"
 label_settings = SubResource("LabelSettings_ui")
 
-[node name="OvenThermalModel" type="Node" parent="."]
+[node name="OvenThermalModel" type="Node" parent="." unique_id=1432957114]
 script = ExtResource("3_thermal")
 
-[node name="ChickenThermalModel" type="Node" parent="."]
+[node name="MultiZoneThermalModel" type="Node" parent="." unique_id=2147483647]
+script = ExtResource("10_mz")
+
+[node name="ChickenThermalModel" type="Node" parent="." unique_id=2034449984]
 script = ExtResource("4_chicken")
 
-[node name="PlantInterface" type="Node" parent="."]
+[node name="PlantInterface" type="Node" parent="." unique_id=1888809716]
 script = ExtResource("8_plant")
 
-[node name="HeaterVisual" type="Node" parent="."]
+[node name="HeaterVisual" type="Node" parent="." unique_id=1696682980]
 script = ExtResource("7_heater")
-heater_meshes = [NodePath("../OvenBody/Heaters/UpperHeater"), NodePath("../OvenBody/Heaters/RearHeater"), NodePath("../OvenBody/Heaters/LowerHeater")]
-heater_lights = [NodePath("../OvenBody/Heaters/UpperHeater/HeaterLight"), NodePath("../OvenBody/Heaters/RearHeater/HeaterLight"), NodePath("../OvenBody/Heaters/LowerHeater/HeaterLight")]
+heater_meshes = Array[NodePath]([NodePath("../OvenBody/Heaters/UpperHeater"), NodePath("../OvenBody/Heaters/MiddleHeater"), NodePath("../OvenBody/Heaters/LowerHeater")])
+heater_lights = Array[NodePath]([NodePath("../OvenBody/Heaters/UpperHeater/HeaterLight"), NodePath("../OvenBody/Heaters/MiddleHeater/HeaterLight"), NodePath("../OvenBody/Heaters/LowerHeater/HeaterLight")])
 
-[node name="OvenBody" type="Node3D" parent="."]
+[node name="CirculationFan" type="Node3D" parent="." unique_id=-2147483648]
+script = ExtResource("11_fan")
+fan_blades_path = NodePath("../OvenBody/Fan/FanBlades")
+fan_light_path = NodePath("../OvenBody/Fan/FanLight")
 
-[node name="Chamber" type="Node3D" parent="OvenBody"]
+[node name="OvenBody" type="Node3D" parent="." unique_id=1505691624]
 
-[node name="LeftWall" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55, 0, 0)
-size = Vector3(0.15, 1.8, 2.6)
+[node name="Chamber" type="Node3D" parent="OvenBody" unique_id=2079055541]
+
+[node name="LeftWall" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=1516601185]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 0, 0)
+size = Vector3(0.1, 0.85, 1.25)
 material = SubResource("StainlessSteel")
 
-[node name="RightWall" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55, 0, 0)
-size = Vector3(0.15, 1.8, 2.6)
+[node name="RightWall" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=318818017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0, 0)
+size = Vector3(0.1, 0.85, 1.25)
 material = SubResource("StainlessSteel")
 
-[node name="Top" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
-size = Vector3(3.4, 0.15, 2.6)
+[node name="Top" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=1232850833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.475, 0)
+size = Vector3(1.3, 0.1, 1.25)
 material = SubResource("StainlessSteel")
 
-[node name="Bottom" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.95, 0)
-size = Vector3(3.4, 0.15, 2.6)
+[node name="Bottom" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=1150079756]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.475, 0)
+size = Vector3(1.3, 0.1, 1.25)
 material = SubResource("StainlessSteel")
 
-[node name="BackWall" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.25)
-size = Vector3(3.4, 2.0, 0.15)
+[node name="BackWall" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=1510934381]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.625)
+size = Vector3(1.3, 0.9, 0.1)
 material = SubResource("StainlessSteel")
 
-[node name="DoorFrameTop" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, 1.25)
-size = Vector3(3.0, 0.12, 0.08)
+[node name="DoorFrameTop" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=575060245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0.625)
+size = Vector3(1.2, 0.08, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="DoorFrameBottom" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.92, 1.25)
-size = Vector3(3.0, 0.12, 0.08)
+[node name="DoorFrameBottom" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=1017030148]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 0.625)
+size = Vector3(1.2, 0.08, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="DoorFrameLeft" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47, 0, 1.25)
-size = Vector3(0.12, 1.84, 0.08)
+[node name="DoorFrameLeft" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=740844032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 0, 0.625)
+size = Vector3(0.08, 0.85, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="DoorFrameRight" type="CSGBox3D" parent="OvenBody/Chamber"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47, 0, 1.25)
-size = Vector3(0.12, 1.84, 0.08)
+[node name="DoorFrameRight" type="CSGBox3D" parent="OvenBody/Chamber" unique_id=1551293883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 0.625)
+size = Vector3(0.08, 0.85, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="Heaters" type="Node3D" parent="OvenBody"]
+[node name="Heaters" type="Node3D" parent="OvenBody" unique_id=1655511028]
 
-[node name="UpperHeater" type="CSGBox3D" parent="OvenBody/Heaters"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, -1.12)
-size = Vector3(2.8, 0.08, 0.12)
+[node name="UpperHeater" type="CSGBox3D" parent="OvenBody/Heaters" unique_id=512932883]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -0.55)
+size = Vector3(1, 0.06, 0.1)
 material = SubResource("HeaterGlow")
 
-[node name="HeaterLight" type="OmniLight3D" parent="OvenBody/Heaters/UpperHeater"]
+[node name="HeaterLight" type="OmniLight3D" parent="OvenBody/Heaters/UpperHeater" unique_id=403363575]
 light_color = Color(1, 0.27, 0, 1)
 light_energy = 0.0
-omni_range = 3.5
+omni_range = 2.0
 
-[node name="RearHeater" type="CSGBox3D" parent="OvenBody/Heaters"]
-transform = Transform3D(0.99, 0, 0.14, 0, 1, 0, -0.14, 0, 0.99, 0, 0.45, -1.18)
-size = Vector3(2.8, 0.08, 0.12)
+[node name="MiddleHeater" type="CSGBox3D" parent="OvenBody/Heaters" unique_id=267212450]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.55)
+size = Vector3(1, 0.06, 0.1)
 material = SubResource("HeaterGlow")
 
-[node name="HeaterLight" type="OmniLight3D" parent="OvenBody/Heaters/RearHeater"]
+[node name="HeaterLight" type="OmniLight3D" parent="OvenBody/Heaters/MiddleHeater" unique_id=1736991294]
 light_color = Color(1, 0.27, 0, 1)
 light_energy = 0.0
-omni_range = 3.0
+omni_range = 2.0
 
-[node name="LowerHeater" type="CSGBox3D" parent="OvenBody/Heaters"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.78, -1.05)
-size = Vector3(2.6, 0.08, 0.12)
+[node name="LowerHeater" type="CSGBox3D" parent="OvenBody/Heaters" unique_id=1796045734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.38, -0.55)
+size = Vector3(1, 0.06, 0.1)
 material = SubResource("HeaterGlow")
 
-[node name="HeaterLight" type="OmniLight3D" parent="OvenBody/Heaters/LowerHeater"]
+[node name="HeaterLight" type="OmniLight3D" parent="OvenBody/Heaters/LowerHeater" unique_id=163831015]
 light_color = Color(1, 0.27, 0, 1)
 light_energy = 0.0
-omni_range = 2.5
+omni_range = 2.0
 
-[node name="DripTray" type="CSGBox3D" parent="OvenBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.82, 0.2)
-size = Vector3(2.6, 0.05, 1.4)
+[node name="Fan" type="Node3D" parent="OvenBody" unique_id=-2147483647]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6)
+
+[node name="FanHousing" type="CSGCylinder3D" parent="OvenBody/Fan" unique_id=-2147483646]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.12
+height = 0.25
+material = SubResource("StainlessSteel")
+
+[node name="FanBlades" type="CSGCylinder3D" parent="OvenBody/Fan" unique_id=-2147483645]
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0.06)
+radius = 0.1
+height = 0.04
+material = SubResource("FanBlade")
+
+[node name="FanLight" type="OmniLight3D" parent="OvenBody/Fan" unique_id=-2147483644]
+light_color = Color(1, 0.3, 0.05, 1)
+light_energy = 0.0
+omni_range = 1.5
+
+[node name="DripTray" type="CSGBox3D" parent="OvenBody" unique_id=704579660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42, 0.3)
+size = Vector3(1.1, 0.04, 0.8)
 material = SubResource("DripTray")
 
-[node name="Door" type="Node3D" parent="OvenBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.45, 0, 1.3)
+[node name="Door" type="Node3D" parent="OvenBody" unique_id=1177879547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.65, 0, 0.625)
 
-[node name="DoorPivot" type="Node3D" parent="OvenBody/Door"]
+[node name="DoorPivot" type="Node3D" parent="OvenBody/Door" unique_id=1232517581]
 script = ExtResource("6_door")
 door_pivot_path = NodePath(".")
 
-[node name="DoorGlass" type="CSGBox3D" parent="OvenBody/Door/DoorPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0, 0.06)
-size = Vector3(2.8, 1.7, 0.05)
+[node name="DoorGlass" type="CSGBox3D" parent="OvenBody/Door/DoorPivot" unique_id=1018651770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0, 0.06)
+size = Vector3(1.2, 0.8, 0.05)
 material = SubResource("GlassDoor")
 
-[node name="DoorFrameTop" type="CSGBox3D" parent="OvenBody/Door/DoorPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, 0.92, 0.10)
-size = Vector3(3.0, 0.12, 0.08)
+[node name="DoorFrameTop" type="CSGBox3D" parent="OvenBody/Door/DoorPivot" unique_id=375953268]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 0.425, 0.1)
+size = Vector3(1.2, 0.08, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="DoorFrameBottom" type="CSGBox3D" parent="OvenBody/Door/DoorPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45, -0.92, 0.10)
-size = Vector3(3.0, 0.12, 0.08)
+[node name="DoorFrameBottom" type="CSGBox3D" parent="OvenBody/Door/DoorPivot" unique_id=501617039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, -0.425, 0.1)
+size = Vector3(1.2, 0.08, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="DoorFrameLeft" type="CSGBox3D" parent="OvenBody/Door/DoorPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07, 0, 0.10)
-size = Vector3(0.12, 1.84, 0.08)
+[node name="DoorFrameLeft" type="CSGBox3D" parent="OvenBody/Door/DoorPivot" unique_id=154316299]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0.1)
+size = Vector3(0.08, 0.85, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="DoorFrameRight" type="CSGBox3D" parent="OvenBody/Door/DoorPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.97, 0, 0.10)
-size = Vector3(0.12, 1.84, 0.08)
+[node name="DoorFrameRight" type="CSGBox3D" parent="OvenBody/Door/DoorPivot" unique_id=175233701]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 0, 0.1)
+size = Vector3(0.08, 0.85, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="DoorHandle" type="CSGBox3D" parent="OvenBody/Door/DoorPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.85, 0, 0.18)
-size = Vector3(0.15, 0.5, 0.08)
+[node name="DoorHandle" type="CSGBox3D" parent="OvenBody/Door/DoorPivot" unique_id=1627468676]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 0, 0.18)
+size = Vector3(0.12, 0.4, 0.06)
 material = SubResource("DoorFrame")
 
-[node name="DisplayPanel" type="CSGBox3D" parent="OvenBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 1.34)
-size = Vector3(1.6, 0.35, 0.05)
+[node name="DisplayPanel" type="CSGBox3D" parent="OvenBody" unique_id=2085462444]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.625)
+size = Vector3(0.8, 0.25, 0.05)
 material = SubResource("DisplayPanel")
 
-[node name="MotorHousing" type="CSGBox3D" parent="OvenBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.95, 0, -1.0)
-size = Vector3(0.4, 0.5, 0.4)
+[node name="MotorHousing" type="CSGBox3D" parent="OvenBody" unique_id=1149961489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 0, -0.3)
+size = Vector3(0.3, 0.4, 0.4)
 material = SubResource("MotorBody")
 
-[node name="DriveShaftVisual" type="CSGCylinder3D" parent="OvenBody"]
-transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -1.75, 0, -0.7)
-radius = 0.04
-height = 0.6
+[node name="DriveShaftVisual" type="CSGCylinder3D" parent="OvenBody" unique_id=1843171186]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.95, 0, -0.3)
+radius = 0.03
+height = 0.5
 material = SubResource("StainlessSteel")
 
-[node name="RotisserieMechanism" type="Node3D" parent="."]
+[node name="RotisserieMechanism" type="Node3D" parent="." unique_id=698388146]
 script = ExtResource("5_rotisser")
-spits = [NodePath("../Spits/Spit1"), NodePath("../Spits/Spit2"), NodePath("../Spits/Spit3")]
-chicken_holders = [NodePath("../Spits/Spit1/ChickenHolder"), NodePath("../Spits/Spit2/ChickenHolder"), NodePath("../Spits/Spit3/ChickenHolder")]
+main_spits = Array[NodePath]([NodePath("../Spits/Carousel/Spit1"), NodePath("../Spits/Carousel/Spit2"), NodePath("../Spits/Carousel/Spit3"), NodePath("../Spits/Carousel/Spit4")])
+chicken_holders = Array[NodePath]([NodePath("../Spits/Carousel/Spit1/ChickenHolder"), NodePath("../Spits/Carousel/Spit2/ChickenHolder"), NodePath("../Spits/Carousel/Spit3/ChickenHolder"), NodePath("../Spits/Carousel/Spit4/ChickenHolder")])
+central_shaft_path = NodePath("../Spits/Carousel")
 chicken_scene = ExtResource("2_my181")
-chickens_per_spit = 5
-spit_length = 2.6
 
-[node name="Spits" type="Node3D" parent="."]
+[node name="Spits" type="Node3D" parent="." unique_id=1332504544]
 
-[node name="Spit1" type="Node3D" parent="Spits"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+[node name="Carousel" type="Node3D" parent="Spits" unique_id=-2147483643]
 
-[node name="SpitBar" type="CSGCylinder3D" parent="Spits/Spit1"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0)
-radius = 0.035
-height = 2.6
+[node name="CarouselShaft" type="CSGCylinder3D" parent="Spits/Carousel" unique_id=-2147483642]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+radius = 0.05
+height = 1.4
 material = SubResource("StainlessSteel")
 
-[node name="ChickenHolder" type="Node3D" parent="Spits/Spit1"]
-
-[node name="Spit2" type="Node3D" parent="Spits"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0, 0)
-
-[node name="SpitBar" type="CSGCylinder3D" parent="Spits/Spit2"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0)
-radius = 0.035
-height = 2.6
+[node name="CarouselBase" type="CSGCylinder3D" parent="Spits/Carousel" unique_id=-2147483641]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.4, 0, 0)
+radius = 0.0
+height = 0.1
 material = SubResource("StainlessSteel")
 
-[node name="ChickenHolder" type="Node3D" parent="Spits/Spit2"]
+[node name="Spit1" type="Node3D" parent="Spits/Carousel" unique_id=118602450]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0.35, 0)
 
-[node name="Spit3" type="Node3D" parent="Spits"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.45, 0)
-
-[node name="SpitBar" type="CSGCylinder3D" parent="Spits/Spit3"]
-transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0)
-radius = 0.035
-height = 2.6
+[node name="SpitBar" type="CSGCylinder3D" parent="Spits/Carousel/Spit1" unique_id=134113000]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+radius = 0.02
+height = 1.0
 material = SubResource("StainlessSteel")
 
-[node name="ChickenHolder" type="Node3D" parent="Spits/Spit3"]
+[node name="ChickenHolder" type="Node3D" parent="Spits/Carousel/Spit1" unique_id=917402764]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+
+[node name="Spit2" type="Node3D" parent="Spits/Carousel" unique_id=1137103972]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0.35)
+
+[node name="SpitBar" type="CSGCylinder3D" parent="Spits/Carousel/Spit2" unique_id=226617874]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+radius = 0.02
+height = 1.0
+material = SubResource("StainlessSteel")
+
+[node name="ChickenHolder" type="Node3D" parent="Spits/Carousel/Spit2" unique_id=1411776583]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+
+[node name="Spit3" type="Node3D" parent="Spits/Carousel" unique_id=1822930349]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, -0.35, 0)
+
+[node name="SpitBar" type="CSGCylinder3D" parent="Spits/Carousel/Spit3" unique_id=786197953]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+radius = 0.02
+height = 1.0
+material = SubResource("StainlessSteel")
+
+[node name="ChickenHolder" type="Node3D" parent="Spits/Carousel/Spit3" unique_id=2116322769]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+
+[node name="Spit4" type="Node3D" parent="Spits/Carousel" unique_id=-2147483640]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, -0.35)
+
+[node name="SpitBar" type="CSGCylinder3D" parent="Spits/Carousel/Spit4" unique_id=-2147483639]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+radius = 0.02
+height = 1.0
+material = SubResource("StainlessSteel")
+
+[node name="ChickenHolder" type="Node3D" parent="Spits/Carousel/Spit4" unique_id=-2147483638]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)

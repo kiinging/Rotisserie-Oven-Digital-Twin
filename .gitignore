@@ -1,0 +1,42 @@
+# ── Godot ──
+# Per-project Godot cache already handled by godot/.gitignore (.godot/, /android/)
+# Auto-generated UID files (Godot 4.4+) cause churn if committed
+*.uid
+
+# ── CODESYS ──
+# Per-user workstation settings and compiler caches
+*.opt
+*.precompilecache
+*.compilecache
+*.compiled-library
+*.library
+*.lib
+*.exp
+*.log
+**/PlcLogic/Application/*_files/
+**/_files/
+
+# ── IDE / Editor ──
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# ── OS junk (Windows) ──
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+*.lnk
+
+# ── Misc build / temp ──
+*.tmp
+*.bak
+*.swp
+*~
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+*.log
+.env

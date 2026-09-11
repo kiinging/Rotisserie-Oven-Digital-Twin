@@ -485,6 +485,10 @@
   +-- simulation/
       +-- ...
   ```
+## Control Documentation
+
+The detailed control specifications for the commercial‑style rotisserie are documented in the [Control Documentation](CONTROL.md). This file contains safety interlocks, CODESYS UI layout, OPC UA variable mapping, cooking sequence details, and troubleshooting guidance.
+
 
   ## Git workflow
 
