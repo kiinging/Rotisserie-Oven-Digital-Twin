@@ -1,5 +1,5 @@
   # Rotisserie Oven Digital Twin
-![Rotisserie](docs/Rotisserie.png)
+<img src="pictures/Rotisserie.png" alt="Rotisserie" width="600"/>
 
   A PLC-based digital twin of a commercial-style chicken rotisserie oven.
 
